@@ -7,23 +7,32 @@ import ProductionPlanPage from '../pages/ppic/ProductionPlanPage';
 import ProductionMonitorPage from '../pages/production-qc/ProductionMonitorPage';
 import ProductStockPage from '../pages/finished-goods/ProductStockPage';
 import useAuthStore from '../store/useAuthStore';
+import ProtectedRoute from './ProtectedRoute';
 
 const AppRoutes = () => {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
   return (
     <Routes>
-      <Route path="/login" element={!isAuthenticated ? <LoginPage /> : <Navigate to="/" />} />
+      {/* Public Route */}
+      <Route 
+        path="/login" 
+        element={!isAuthenticated ? <LoginPage /> : <Navigate to="/" replace />} 
+      />
       
-      <Route element={isAuthenticated ? <MainLayout /> : <Navigate to="/login" />}>
-        <Route path="/" element={<DashboardPage />} />
-        <Route path="/raw-material" element={<MaterialStockPage />} />
-        <Route path="/ppic" element={<ProductionPlanPage />} />
-        <Route path="/production-qc" element={<ProductionMonitorPage />} />
-        <Route path="/finished-goods" element={<ProductStockPage />} />
+      {/* Protected Routes */}
+      <Route element={<ProtectedRoute />}>
+        <Route element={<MainLayout />}>
+          <Route path="/" element={<DashboardPage />} />
+          <Route path="/raw-material" element={<MaterialStockPage />} />
+          <Route path="/ppic" element={<ProductionPlanPage />} />
+          <Route path="/production-qc" element={<ProductionMonitorPage />} />
+          <Route path="/finished-goods" element={<ProductStockPage />} />
+        </Route>
       </Route>
 
-      <Route path="*" element={<Navigate to="/" />} />
+      {/* Fallback */}
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 };

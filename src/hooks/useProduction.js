@@ -9,10 +9,16 @@ export const useProduction = () => {
     queryFn: productionService.getProductionPlans,
   });
 
+  const rejectedQuery = useQuery({
+    queryKey: ['rejected-total'],
+    queryFn: productionService.getRejectedTotal,
+  });
+
   const createMutation = useMutation({
     mutationFn: productionService.createProductionPlan,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['production-plans'] });
+      queryClient.invalidateQueries({ queryKey: ['rejected-total'] });
     },
   });
 
@@ -29,12 +35,14 @@ export const useProduction = () => {
       queryClient.invalidateQueries({ queryKey: ['production-plans'] });
       queryClient.invalidateQueries({ queryKey: ['materials'] }); // Trigger material stock update
       queryClient.invalidateQueries({ queryKey: ['finished-goods'] }); // Trigger product stock update
+      queryClient.invalidateQueries({ queryKey: ['rejected-total'] });
     },
   });
 
   return {
     plans: plansQuery.data || [],
-    isLoading: plansQuery.isLoading,
+    rejectedTotal: rejectedQuery.data || 0,
+    isLoading: plansQuery.isLoading || rejectedQuery.isLoading,
     createPlan: createMutation.mutateAsync,
     updateStatus: statusMutation.mutateAsync,
     submitQC: qcMutation.mutateAsync,

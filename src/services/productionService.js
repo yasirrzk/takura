@@ -26,6 +26,11 @@ export const getProductionPlans = async () => {
   return [...productionPlans];
 };
 
+export const getRejectedTotal = async () => {
+  await new Promise(resolve => setTimeout(resolve, 500));
+  return productionPlans.reduce((acc, p) => acc + (p.qc_results?.ng_quantity || 0), 0);
+};
+
 export const createProductionPlan = async (data) => {
   await new Promise(resolve => setTimeout(resolve, 500));
   const newPlan = {
