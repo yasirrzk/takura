@@ -1,16 +1,37 @@
-# React + Vite
+# PT Takura Manufacturing & Warehouse Monitoring System
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Aplikasi Web Monitoring Siklus Produksi dan Pergudangan Manufaktur terintegrasi yang dirancang khusus sebagai sistem solusi untuk **PT Takura**. Aplikasi ini mengotomatisasi dan menghubungkan seluruh alur manufaktur dari hulu ke hilir, mulai dari pengelolaan bahan baku, perencanaan produksi (PPIC), eksekusi produksi & *Quality Control* (QC), hingga gudang barang jadi dan pengiriman ke pelanggan dalam satu panel kendali terpusat (**Single-Role Admin**).
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 🚀 Fitur Utama (Alur Sistem Terintegrasi)
 
-## React Compiler
+Sistem ini melacak pergerakan material dan produk secara *real-time* melalui 4 modul utama yang saling terhubung:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+1. **Gudang Bahan Baku (Raw Material)**
+   * Manajemen inventaris stok bahan baku secara *real-time*.
+   * Pencatatan log material masuk dari supplier dan material keluar.
+2. **PPIC Planning (Perencanaan Produksi)**
+   * Pembuatan rencana jadwal produksi (*Production Plan*).
+   * Fitur kalkulasi otomatis kebutuhan bahan baku berdasarkan target kuantitas produk yang dipilih.
+   * Validasi otomatis ketersediaan stok bahan baku sebelum rencana produksi disetujui (`Scheduled`).
+3. **Eksekusi Produksi & Quality Control (QA/QC)**
+   * *Monitoring* status kerja produksi yang sedang berjalan (`In Progress`).
+   * Form input hasil inspeksi kualitas setelah produksi selesai.
+   * Pemisahan otomatis output produksi menjadi produk **OK** (Lolos QC) dan produk **NG** (*Not Good*/Reject) beserta catatan jenis defect-nya.
+   * **Trigger Sistem:** Input produk **OK** secara otomatis akan memotong stok bahan baku terkait dan langsung menambah kuantitas stok di Gudang Barang Jadi.
+4. **Gudang Barang Jadi & Shipping (Finished Goods)**
+   * Pemantauan stok produk jadi yang siap didistribusikan.
+   * Formulir pencatatan pengiriman barang ke customer (mengurangi stok barang jadi secara otomatis berdasarkan nomor surat jalan).
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 💻 Tech Stack
+
+### Front-End (Client)
+* **Core Framework:** React.js (Vite)
+* **Styling & UI:** Tailwind CSS
+* **Routing:** React Router v6
+* **Server State Management:** TanStack Query v5 (React Query) & Axios
+* **Client State Management:** Zustand (Auth session & global UI state)
+* **Data Visualization:** Recharts (Grafik monitoring real-time pada Dashboard)
