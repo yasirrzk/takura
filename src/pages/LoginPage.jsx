@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
-import { Lock, User, ShieldCheck, ArrowRight } from 'lucide-react';
+import { Lock, User, ShieldAlert, ShieldCheck, ArrowRight, Lightbulb } from 'lucide-react';
 import useAuthStore from '../store/useAuthStore';
 
 // Zod Schema for Validation
@@ -27,46 +27,64 @@ const LoginPage = () => {
 
   const onSubmit = async (data) => {
     // Mock login logic
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 1200));
     
     if (data.username === 'admin' && data.password === 'adminadmin') {
-      login({ name: 'Admin Takaru', role: 'Administrator' }, 'mock-jwt-token');
-      toast.success('Login Berhasil', {
-        description: 'Selamat datang kembali, Admin!',
+      login({ name: 'Admin Takura', role: 'Administrator' }, 'mock-jwt-token');
+      toast.success('Akses Diberikan', {
+        description: 'Selamat datang di Manufacturing System PT Takura.',
       });
       navigate('/');
     } else {
-      toast.error('Login Gagal', {
-        description: 'Username atau Password salah. (Hint: admin / adminadmin)',
+      toast.error('Otorisasi Ditolak', {
+        description: 'Kombinasi Username & Password tidak terdaftar.',
       });
     }
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 relative overflow-hidden font-sans">
-      {/* Aesthetic Background Elements */}
-      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-indigo-500/10 rounded-full blur-[120px]" />
-      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-slate-500/10 rounded-full blur-[120px]" />
+    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 relative overflow-hidden font-sans text-slate-755 selection:bg-indigo-100 selection:text-indigo-900">
+      
+      {/* Light Aesthetic Background Blob Gradients */}
+      <div className="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] max-w-[600px] bg-indigo-500/5 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-[-10%] right-[-10%] w-[50vw] h-[50vw] max-w-[600px] bg-slate-550/5 rounded-full blur-[120px] pointer-events-none" />
+      
+      {/* Subtle modern line background decoration */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#e2e8f0_1px,transparent_1px),linear-gradient(to_bottom,#e2e8f0_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] opacity-40 pointer-events-none" />
 
       <motion.div 
-        initial={{ opacity: 0, y: 20, scale: 0.95 }}
+        initial={{ opacity: 0, y: 25, scale: 0.97 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
-        className="w-full max-w-[440px] z-10"
+        transition={{ duration: 0.5, ease: [0.23, 1, 0.32, 1] }}
+        className="w-full max-w-[450px] z-10"
       >
-        <div className="bg-white rounded-[2.5rem] shadow-2xl shadow-slate-200/60 border border-slate-100 p-10 md:p-12">
+        {/* Premium Light Card */}
+        <div className="bg-white/90 backdrop-blur-md rounded-[2.5rem] border border-slate-200/50 shadow-[0_32px_64px_-16px_rgba(79,70,229,0.1)] p-10 md:p-12 relative overflow-hidden">
+          
+          {/* Subtle top edge gradient highlighting */}
+          <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-indigo-500/25 to-transparent" />
+
           {/* Logo & Header */}
           <div className="flex flex-col items-center mb-10 text-center">
-            <div className="size-16 bg-slate-900 rounded-3xl flex items-center justify-center shadow-xl shadow-slate-900/20 mb-6 rotate-3">
-              <ShieldCheck className="text-white size-8" />
+            <div className="relative group mb-5">
+              {/* Outer soft shadow ring */}
+              <div className="absolute inset-0 bg-indigo-500/20 rounded-3xl blur-md opacity-50 group-hover:opacity-75 transition-opacity duration-350" />
+              <div className="relative size-16 bg-slate-900 rounded-3xl flex items-center justify-center shadow-lg shadow-slate-950/20 mb-1 rotate-3 group-hover:rotate-6 transition-all duration-300">
+                <ShieldCheck className="text-white size-8" />
+              </div>
             </div>
-            <h1 className="text-3xl font-black text-slate-900 tracking-tight mb-2">Sign in to Takaru</h1>
-            <p className="text-slate-400 font-medium text-sm px-4">Management system for integrated manufacturing cycle.</p>
+            
+            <h1 className="text-3xl font-black text-slate-900 tracking-tight mb-2">
+              TAKARU <span className="text-xs bg-indigo-50 text-indigo-650 font-extrabold px-2 py-0.5 rounded-md border border-indigo-100/80 align-middle ml-1">SYSTEM</span>
+            </h1>
+            <p className="text-slate-500 text-sm font-semibold tracking-wide px-2">Sistem Monitoring Siklus Produksi & Gudang</p>
           </div>
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            
+            {/* Username field */}
             <div className="space-y-2">
-              <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Username</label>
+              <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Username</label>
               <div className="relative group">
                 <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-600 transition-colors">
                   <User size={18} />
@@ -74,19 +92,22 @@ const LoginPage = () => {
                 <input 
                   {...register('username')}
                   type="text" 
-                  placeholder="Enter your username"
-                  className={`w-full bg-slate-50 border-2 ${errors.username ? 'border-red-100 focus:border-red-500' : 'border-transparent focus:border-indigo-600'} rounded-2xl py-4 pl-12 pr-4 text-sm font-medium transition-all outline-none focus:bg-white`}
+                  placeholder="Masukkan username admin"
+                  className={`w-full bg-slate-50 border-2 ${errors.username ? 'border-red-100 focus:border-red-500 focus:bg-white' : 'border-transparent focus:border-indigo-650 focus:bg-white'} rounded-2xl py-4 pl-12 pr-4 text-sm font-bold text-slate-900 placeholder-slate-400 transition-all outline-none focus:ring-4 focus:ring-indigo-500/10`}
                 />
               </div>
               {errors.username && (
-                <p className="text-red-500 text-[10px] font-bold uppercase tracking-tight ml-2">{errors.username.message}</p>
+                <p className="text-red-500 text-[10px] font-bold uppercase tracking-tight ml-2 flex items-center">
+                  <ShieldAlert size={11} className="mr-1" /> {errors.username.message}
+                </p>
               )}
             </div>
 
+            {/* Password field */}
             <div className="space-y-2">
               <div className="flex justify-between items-center ml-1">
-                <label className="text-xs font-black text-slate-400 uppercase tracking-widest">Password</label>
-                <button type="button" className="text-[10px] font-bold text-indigo-600 hover:text-indigo-700 uppercase tracking-tight">Forgot?</button>
+                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Password</label>
+                <button type="button" className="text-[10px] font-extrabold text-indigo-600 hover:text-indigo-700 uppercase tracking-wider">Lupa Sandi?</button>
               </div>
               <div className="relative group">
                 <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-600 transition-colors">
@@ -96,32 +117,35 @@ const LoginPage = () => {
                   {...register('password')}
                   type="password" 
                   placeholder="••••••••"
-                  className={`w-full bg-slate-50 border-2 ${errors.password ? 'border-red-100 focus:border-red-500' : 'border-transparent focus:border-indigo-600'} rounded-2xl py-4 pl-12 pr-4 text-sm font-medium transition-all outline-none focus:bg-white`}
+                  className={`w-full bg-slate-50 border-2 ${errors.password ? 'border-red-100 focus:border-red-500 focus:bg-white' : 'border-transparent focus:border-indigo-650 focus:bg-white'} rounded-2xl py-4 pl-12 pr-4 text-sm font-bold text-slate-900 placeholder-slate-400 transition-all outline-none focus:ring-4 focus:ring-indigo-500/10`}
                 />
               </div>
               {errors.password && (
-                <p className="text-red-500 text-[10px] font-bold uppercase tracking-tight ml-2">{errors.password.message}</p>
+                <p className="text-red-500 text-[10px] font-bold uppercase tracking-tight ml-2 flex items-center">
+                  <ShieldAlert size={11} className="mr-1" /> {errors.password.message}
+                </p>
               )}
             </div>
 
+            {/* Login button */}
             <button 
               type="submit" 
               disabled={isSubmitting}
-              className="w-full bg-slate-900 text-white rounded-2xl py-4 font-black text-sm tracking-wide shadow-xl shadow-slate-900/10 hover:bg-slate-800 hover:-translate-y-0.5 active:translate-y-0 transition-all flex items-center justify-center space-x-2 group"
+              className="w-full bg-slate-900 hover:bg-slate-800 text-white rounded-2xl py-4 font-black text-sm tracking-wider shadow-lg shadow-slate-900/15 hover:-translate-y-0.5 active:translate-y-0 transition-all flex items-center justify-center space-x-2 group cursor-pointer"
             >
               {isSubmitting ? (
                 <div className="size-5 border-2 border-white/20 border-t-white rounded-full animate-spin" />
               ) : (
                 <>
-                  <span>Login</span>
-                  <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                  <span>MASUK SISTEM</span>
+                  <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform duration-300" />
                 </>
               )}
             </button>
           </form>
 
-          <div className="mt-10 pt-8 border-t border-slate-50 text-center">
-            <p className="text-[10px] text-slate-400 font-bold uppercase tracking-[0.2em]">Secure Session Powered by Takaru</p>
+          <div className="mt-8 pt-6 border-t border-slate-100 text-center">
+            <p className="text-[9px] text-slate-400 font-bold uppercase tracking-[0.25em]">Otorisasi Terenkripsi &bull; PT Takaru</p>
           </div>
         </div>
       </motion.div>
