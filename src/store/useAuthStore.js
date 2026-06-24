@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { persist, createJSONStorage } from 'zustand/middleware';
 
 const useAuthStore = create(
   persist(
@@ -9,17 +9,18 @@ const useAuthStore = create(
       isAuthenticated: false,
 
       login: (userData, token) => {
-        localStorage.setItem('token', token);
+        sessionStorage.setItem('token', token);
         set({ user: userData, token, isAuthenticated: true });
       },
 
       logout: () => {
-        localStorage.removeItem('token');
+        sessionStorage.removeItem('token');
         set({ user: null, token: null, isAuthenticated: false });
       },
     }),
     {
-      name: 'auth-storage', // name of the item in the storage (must be unique)
+      name: 'auth-storage',
+      storage: createJSONStorage(() => sessionStorage),
     }
   )
 );

@@ -30,7 +30,7 @@ const LoginPage = () => {
     await new Promise((resolve) => setTimeout(resolve, 1000));
     
     if (data.username === 'admin' && data.password === 'adminadmin') {
-      login({ name: 'Admin Takura', role: 'Administrator' }, 'mock-jwt-token');
+      login({ name: 'Admin Takaru', role: 'Administrator' }, 'mock-jwt-token');
       toast.success('Login Berhasil', {
         description: 'Selamat datang kembali, Admin!',
       });
@@ -60,7 +60,7 @@ const LoginPage = () => {
             <div className="size-16 bg-slate-900 rounded-3xl flex items-center justify-center shadow-xl shadow-slate-900/20 mb-6 rotate-3">
               <ShieldCheck className="text-white size-8" />
             </div>
-            <h1 className="text-3xl font-black text-slate-900 tracking-tight mb-2">Sign in to Takura</h1>
+            <h1 className="text-3xl font-black text-slate-900 tracking-tight mb-2">Sign in to Takaru</h1>
             <p className="text-slate-400 font-medium text-sm px-4">Management system for integrated manufacturing cycle.</p>
           </div>
 
@@ -121,7 +121,7 @@ const LoginPage = () => {
           </form>
 
           <div className="mt-10 pt-8 border-t border-slate-50 text-center">
-            <p className="text-[10px] text-slate-400 font-bold uppercase tracking-[0.2em]">Secure Session Powered by Takura</p>
+            <p className="text-[10px] text-slate-400 font-bold uppercase tracking-[0.2em]">Secure Session Powered by Takaru</p>
           </div>
         </div>
       </motion.div>

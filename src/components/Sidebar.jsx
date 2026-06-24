@@ -35,7 +35,7 @@ const Sidebar = () => {
           <span className="text-white font-black text-xl">T</span>
         </div>
         <div>
-          <h1 className="text-white font-black tracking-tight text-xl leading-none">TAKURA</h1>
+          <h1 className="text-white font-black tracking-tight text-xl leading-none">TAKARU</h1>
           <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">Manufacturing System</p>
         </div>
       </div>
