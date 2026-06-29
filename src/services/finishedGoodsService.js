@@ -1,11 +1,10 @@
-// Mock database for Finished Goods
-let finishedGoods = [
+// Mock database for Finished Goods and Shipments with localStorage persistence
+const DEFAULT_FINISHED_GOODS = [
   { id: 1, name: 'Ember Plastik 5L', stock: 150 },
   { id: 2, name: 'Kursi Bakso', stock: 75 },
 ];
 
-// Mock database for Shipment History
-let shipmentHistory = [
+const DEFAULT_SHIPMENT_HISTORY = [
   { 
     id: 101, 
     product_name: 'Ember Plastik 5L', 
@@ -24,22 +23,57 @@ let shipmentHistory = [
   },
 ];
 
+const loadFinishedGoods = () => {
+  const data = localStorage.getItem('takura_finished_goods');
+  if (!data) {
+    localStorage.setItem('takura_finished_goods', JSON.stringify(DEFAULT_FINISHED_GOODS));
+    return DEFAULT_FINISHED_GOODS;
+  }
+  return JSON.parse(data);
+};
+
+const loadShipmentHistory = () => {
+  const data = localStorage.getItem('takura_shipment_history');
+  if (!data) {
+    localStorage.setItem('takura_shipment_history', JSON.stringify(DEFAULT_SHIPMENT_HISTORY));
+    return DEFAULT_SHIPMENT_HISTORY;
+  }
+  return JSON.parse(data);
+};
+
+let finishedGoods = loadFinishedGoods();
+let shipmentHistory = loadShipmentHistory();
+
+const saveFinishedGoods = () => {
+  localStorage.setItem('takura_finished_goods', JSON.stringify(finishedGoods));
+};
+
+const saveShipmentHistory = () => {
+  localStorage.setItem('takura_shipment_history', JSON.stringify(shipmentHistory));
+};
+
 export const getFinishedGoods = async () => {
-  await new Promise(resolve => setTimeout(resolve, 500));
+  await new Promise(resolve => setTimeout(resolve, 300));
+  finishedGoods = loadFinishedGoods();
   return [...finishedGoods];
 };
 
 export const getShipmentHistory = async () => {
-  await new Promise(resolve => setTimeout(resolve, 500));
+  await new Promise(resolve => setTimeout(resolve, 300));
+  shipmentHistory = loadShipmentHistory();
   return [...shipmentHistory];
 };
 
 export const shipFinishedGoods = async (id, data) => {
   // data: { quantity, destination }
-  await new Promise(resolve => setTimeout(resolve, 500));
+  await new Promise(resolve => setTimeout(resolve, 300));
+  finishedGoods = loadFinishedGoods();
+  shipmentHistory = loadShipmentHistory();
+
   const product = finishedGoods.find(p => p.id === id);
   if (product) {
     product.stock -= data.quantity;
+    saveFinishedGoods();
     
     // Record in history
     const newShipment = {
@@ -51,19 +85,23 @@ export const shipFinishedGoods = async (id, data) => {
       date: new Date().toISOString().split('T')[0]
     };
     shipmentHistory.unshift(newShipment);
+    saveShipmentHistory();
     return newShipment;
   }
   throw new Error('Product not found');
 };
 
 export const updateShipmentStatus = async (id, status) => {
-  await new Promise(resolve => setTimeout(resolve, 500));
+  await new Promise(resolve => setTimeout(resolve, 300));
+  shipmentHistory = loadShipmentHistory();
   shipmentHistory = shipmentHistory.map(s => s.id === id ? { ...s, status } : s);
+  saveShipmentHistory();
   return { id, status };
 };
 
 // Internal helper for production QC trigger
 export const _addFinishedGoodsInternal = (name, quantity) => {
+  finishedGoods = loadFinishedGoods();
   const existing = finishedGoods.find(p => p.name === name);
   if (existing) {
     existing.stock += quantity;
@@ -74,4 +112,5 @@ export const _addFinishedGoodsInternal = (name, quantity) => {
       stock: quantity
     });
   }
+  saveFinishedGoods();
 };
