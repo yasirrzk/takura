@@ -1,6 +1,6 @@
 import { useMaterials } from "../hooks/useMaterials";
 import { useProduction } from "../hooks/useProduction";
-import { useFinishedGoods } from "../hooks/useFinishedGoods";
+import { useInventory } from "../hooks/useInventory";
 import {
   BarChart,
   Bar,
@@ -28,10 +28,10 @@ import { motion } from "framer-motion";
 const DashboardPage = () => {
   const { materials } = useMaterials();
   const { plans, rejectedTotal } = useProduction();
-  const { products } = useFinishedGoods();
+  const { inventory } = useInventory();
 
   const activePlansCount = plans.filter((p) => p.status !== "Completed").length;
-  const finishedGoodsCount = products.reduce((acc, p) => acc + p.stock, 0);
+  const finishedGoodsCount = inventory.reduce((acc, p) => acc + p.stock, 0);
 
   const stats = [
     {

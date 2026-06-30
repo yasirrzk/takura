@@ -5,10 +5,13 @@ import {
   Package, 
   ClipboardList, 
   Activity, 
-  CheckCircle, 
+  Truck,
+  Wrench,
+  ShieldCheck,
   LogOut,
   ChevronRight,
-  X
+  X,
+  Trash2
 } from 'lucide-react';
 import useAuthStore from '../store/useAuthStore';
 import useUiStore from '../store/useUiStore';
@@ -26,10 +29,12 @@ const Sidebar = () => {
 
   const menuItems = [
     { name: 'Dashboard', path: '/', icon: LayoutDashboard },
-    { name: 'Material Baku', path: '/raw-material', icon: Package },
     { name: 'PPIC Planning', path: '/ppic', icon: ClipboardList },
-    { name: 'Produksi & QC', path: '/production-qc', icon: Activity },
-    { name: 'Barang Jadi', path: '/finished-goods', icon: CheckCircle },
+    { name: 'Bahan Baku', path: '/raw-material', icon: Package },
+    { name: 'Hasil Produksi', path: '/production', icon: Activity },
+    { name: 'Pengiriman', path: '/delivery', icon: Truck },
+    { name: 'Quality Control', path: '/qc-repair', icon: ShieldCheck },
+    { name: 'Repair Workshop', path: '/repair-workshop', icon: Wrench },
   ];
 
   return (
@@ -53,7 +58,7 @@ const Sidebar = () => {
               <span className="text-white font-black text-xl">T</span>
             </div>
             <div>
-              <h1 className="text-white font-black tracking-tight text-xl leading-none">TAKURA</h1>
+              <h1 className="text-white font-black tracking-tight text-xl leading-none">PRIMASTI</h1>
               <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">Manufacturing</p>
             </div>
           </div>
@@ -115,6 +120,19 @@ const Sidebar = () => {
           >
             <LogOut size={18} className="mr-3 transition-transform group-hover:-translate-x-1" />
             <span className="font-bold text-sm">Sign Out</span>
+          </button>
+          
+          <button 
+            onClick={() => {
+              if(window.confirm('Reset semua data aplikasi ke awal?')) {
+                localStorage.clear();
+                window.location.reload();
+              }
+            }}
+            className="w-full flex items-center px-4 py-3 mt-1 rounded-xl text-slate-600 hover:text-amber-500 hover:bg-amber-500/10 transition-all duration-300 group cursor-pointer"
+          >
+            <Trash2 size={18} className="mr-3 transition-transform group-hover:rotate-12" />
+            <span className="font-bold text-xs">Reset Data Demo</span>
           </button>
         </div>
       </div>

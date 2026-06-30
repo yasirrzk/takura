@@ -9,16 +9,10 @@ export const useProduction = () => {
     queryFn: productionService.getProductionPlans,
   });
 
-  const rejectedQuery = useQuery({
-    queryKey: ['rejected-total'],
-    queryFn: productionService.getRejectedTotal,
-  });
-
   const createMutation = useMutation({
     mutationFn: productionService.createProductionPlan,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['production-plans'] });
-      queryClient.invalidateQueries({ queryKey: ['rejected-total'] });
     },
   });
 
@@ -29,22 +23,20 @@ export const useProduction = () => {
     },
   });
 
-  const qcMutation = useMutation({
-    mutationFn: ({ id, qcData }) => productionService.submitQC(id, qcData),
+  const finishMutation = useMutation({
+    mutationFn: ({ id, outputQuantity }) => productionService.finishProduction(id, outputQuantity),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['production-plans'] });
-      queryClient.invalidateQueries({ queryKey: ['materials'] }); // Trigger material stock update
-      queryClient.invalidateQueries({ queryKey: ['finished-goods'] }); // Trigger product stock update
-      queryClient.invalidateQueries({ queryKey: ['rejected-total'] });
+      queryClient.invalidateQueries({ queryKey: ['materials'] });
+      queryClient.invalidateQueries({ queryKey: ['inventory'] }); // Refresh inventory so DeliveryPage shows the new product
     },
   });
 
   return {
     plans: plansQuery.data || [],
-    rejectedTotal: rejectedQuery.data || 0,
-    isLoading: plansQuery.isLoading || rejectedQuery.isLoading,
+    isLoading: plansQuery.isLoading,
     createPlan: createMutation.mutateAsync,
     updateStatus: statusMutation.mutateAsync,
-    submitQC: qcMutation.mutateAsync,
+    finishProduction: finishMutation.mutateAsync,
   };
 };

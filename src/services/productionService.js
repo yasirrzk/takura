@@ -1,37 +1,7 @@
 import { _updateStockInternal as updateMaterialStock } from './materialService';
-import { _addFinishedGoodsInternal as addFinishedGoods } from './finishedGoodsService';
+import { _addInventoryInternal as addInventory } from './inventoryService';
 
-// Mock database for Production Plans with localStorage persistence and rich mock data
-const DEFAULT_PRODUCTION_PLANS = [
-  { 
-    id: 1, 
-    product_name: 'Ember Plastik 5L', 
-    target_quantity: 100, 
-    material_id: 1, 
-    material_requirement: 50,
-    status: 'Scheduled' 
-  },
-  { 
-    id: 2, 
-    product_name: 'Gayung Biru', 
-    target_quantity: 200, 
-    material_id: 2, 
-    material_requirement: 10,
-    status: 'In Progress' 
-  },
-  { 
-    id: 3, 
-    product_name: 'Kursi Bakso', 
-    target_quantity: 120, 
-    material_id: 3, 
-    material_requirement: 120,
-    status: 'Completed',
-    qc_results: {
-      ok_quantity: 115,
-      ng_quantity: 5
-    }
-  }
-];
+const DEFAULT_PRODUCTION_PLANS = [];
 
 const loadProductionPlans = () => {
   const data = localStorage.getItem('takura_production_plans');
@@ -57,7 +27,8 @@ export const getProductionPlans = async () => {
 export const getRejectedTotal = async () => {
   await new Promise(resolve => setTimeout(resolve, 300));
   productionPlans = loadProductionPlans();
-  return productionPlans.reduce((acc, p) => acc + (p.qc_results?.ng_quantity || 0), 0);
+  // We can just return a dummy 0 or calculate it from QC if we want
+  return 0;
 };
 
 export const createProductionPlan = async (data) => {
@@ -80,25 +51,23 @@ export const updateProductionStatus = async (id, status) => {
   return { id, status };
 };
 
-export const submitQC = async (id, qcData) => {
+export const finishProduction = async (id, outputQuantity) => {
   await new Promise(resolve => setTimeout(resolve, 300));
   productionPlans = loadProductionPlans();
   
   const plan = productionPlans.find(p => p.id === id);
   if (plan) {
-    // Core Logic Trigger:
-    // 1. Reduce Material Stock
+    // 1. Cut material stock
     updateMaterialStock(plan.material_id, -plan.material_requirement);
     
-    // 2. Add to Finished Goods Stock (only OK quantity)
-    addFinishedGoods(plan.product_name, qcData.ok_quantity);
+    // 2. Add to Inventory (Finished Goods)
+    addInventory(plan.product_name, outputQuantity);
     
-    // 3. Complete the plan
+    // 3. Update status to completed
     plan.status = 'Completed';
-    plan.qc_results = qcData;
-    
+    plan.final_output = outputQuantity;
     saveProductionPlans();
   }
   
-  return { id, success: true };
+  return { success: true };
 };

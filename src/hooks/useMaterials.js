@@ -30,6 +30,13 @@ export const useMaterials = () => {
     },
   });
 
+  const createLogMutation = useMutation({
+    mutationFn: materialService.createMaterialLog,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['materials'] });
+    },
+  });
+
   return {
     materials: materialsQuery.data || [],
     isLoading: materialsQuery.isLoading,
@@ -37,5 +44,6 @@ export const useMaterials = () => {
     createMaterial: createMutation.mutateAsync,
     updateMaterial: updateMutation.mutateAsync,
     deleteMaterial: deleteMutation.mutateAsync,
+    createMaterialLog: createLogMutation.mutateAsync,
   };
 };
