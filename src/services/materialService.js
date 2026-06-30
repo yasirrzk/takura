@@ -21,9 +21,8 @@ const saveMaterials = () => {
 };
 
 export const getMaterials = async () => {
-  // Simulate API delay
   await new Promise(resolve => setTimeout(resolve, 300));
-  materials = loadMaterials(); // reload to get latest updates
+  materials = loadMaterials();
   return [...materials];
 };
 
@@ -52,6 +51,18 @@ export const deleteMaterial = async (id) => {
   materials = loadMaterials();
   materials = materials.filter(m => m.id !== id);
   saveMaterials();
+  return { success: true };
+};
+
+export const createMaterialLog = async (data) => {
+  await new Promise(resolve => setTimeout(resolve, 300));
+  materials = loadMaterials();
+  const material = materials.find(m => m.id === data.materialId);
+  if (material) {
+    if (data.type === 'IN') material.stock += data.quantity;
+    if (data.type === 'OUT') material.stock -= data.quantity;
+    saveMaterials();
+  }
   return { success: true };
 };
 

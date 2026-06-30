@@ -4,8 +4,10 @@ import LoginPage from '../pages/LoginPage';
 import DashboardPage from '../pages/DashboardPage';
 import MaterialStockPage from '../pages/raw-material/MaterialStockPage';
 import ProductionPlanPage from '../pages/ppic/ProductionPlanPage';
-import ProductionMonitorPage from '../pages/production-qc/ProductionMonitorPage';
-import ProductStockPage from '../pages/finished-goods/ProductStockPage';
+import ProductionOutputPage from '../pages/production/ProductionOutputPage';
+import DeliveryPage from '../pages/delivery/DeliveryPage';
+import QCMainPage from '../pages/qc-repair/QCMainPage';
+import RepairWorkshopPage from '../pages/qc-repair/RepairWorkshopPage';
 import useAuthStore from '../store/useAuthStore';
 import ProtectedRoute from './ProtectedRoute';
 
@@ -26,8 +28,10 @@ const AppRoutes = () => {
           <Route path="/" element={<DashboardPage />} />
           <Route path="/raw-material" element={<MaterialStockPage />} />
           <Route path="/ppic" element={<ProductionPlanPage />} />
-          <Route path="/production-qc" element={<ProductionMonitorPage />} />
-          <Route path="/finished-goods" element={<ProductStockPage />} />
+          <Route path="/production" element={<ProductionOutputPage />} />
+          <Route path="/delivery" element={<DeliveryPage />} />
+          <Route path="/qc-repair" element={<QCMainPage />} />
+          <Route path="/repair-workshop" element={<RepairWorkshopPage />} />
         </Route>
       </Route>
 
